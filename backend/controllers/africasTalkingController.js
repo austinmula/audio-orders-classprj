@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-
+const axios = require('axios');
 const dotenv = require("dotenv");
 dotenv.config({
     path: "../.env",
@@ -69,13 +69,20 @@ exports.registerUser = asyncHandler(async (req, res) => {
 // @access  Public
 exports.getAllCalls = asyncHandler(async (req, res) => {
     try {
+        const songs = []
+        // GET https://api.twilio.com/2010-04-01/Accounts/ACXXXXX.../Recordings/RE557ce644e5ab84fa21cc21112e22c485.mp3
 
         client.recordings.list({limit: 20})
             .then(recordings =>
                 {
 
-                    recordings.forEach(r => console.log(r.sid))
-                    res.json(recordings)
+                    recordings.forEach(r => {
+                        const a = `https://api.twilio.com/2010-04-01/Accounts/${r.accountSid}/Recordings/${r.sid}.mp3`
+                        songs.push(a)
+                        console.log(songs)
+                    })
+
+                    res.json(songs)
                 }
             );
 
