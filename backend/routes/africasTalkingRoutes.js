@@ -1,9 +1,10 @@
-import express from 'express'
+const express= require('express');
 
 const router = express.Router()
 
-import {registerUser} from '../controllers/africasTalkingController.js'
+const {registerUser} = require('../controllers/africasTalkingController.js')
 
 
 router.route('/call').post(registerUser);
-export default router
+
+module.exports = router;

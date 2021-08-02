@@ -1,11 +1,9 @@
-import express from 'express'
-import cors from 'cors'
-import morgan from 'morgan'
-import {notFound, errorHandler} from './middleware/errorMiddleware.js'
-import connectDB from './config/db.js'
-import dotenv from 'dotenv'
+const express= require('express');
+const cors =  require('cors');
+const morgan=  require('morgan');
+const dotenv = require('dotenv');
 dotenv.config()
-connectDB()
+
 const app = express()
 
 
@@ -17,7 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 //import routes
-import RegisterRoutes from './routes/africasTalkingRoutes.js'
+const RegisterRoutes = require( './routes/africasTalkingRoutes.js');
 //filter content to prevent nosql injection
 const blackList = ['$','{','&&','||']
 const options = {
@@ -36,8 +34,7 @@ app.get('/', (req, res) => {
     res.send('API is running....')
 })
 
-app.use(notFound)
-app.use(errorHandler)
+
 
 const PORT = process.env.PORT || 5000
 

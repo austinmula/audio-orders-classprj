@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "SFE4020 Visually impaired project",
   "main": "backend/server.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"No test specified\""
   },
@@ -27,6 +26,7 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "morgan": "^1.10.0",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "twilio": "^3.66.1"
   }
 }
