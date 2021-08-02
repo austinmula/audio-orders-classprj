@@ -14,7 +14,7 @@ const client = require('twilio')(accountSid, authToken);
 
 // @desc    Register a new user from ussd
 // @route   POST
-// @access  Public - to be made private in future
+// @access  Public
 exports.registerUser = asyncHandler(async (req, res) => {
     try {
     // body from ussd
@@ -55,6 +55,30 @@ exports.registerUser = asyncHandler(async (req, res) => {
             });
         }
         console.log('after twilio')
+
+
+
+    } catch (e) {
+        throw new Error(`Something went wrong ${e}`)
+
+    }
+})
+
+// @desc   Get all recordings
+// @route   GET
+// @access  Public
+exports.getAllCalls = asyncHandler(async (req, res) => {
+    try {
+
+        client.recordings.list({limit: 20})
+            .then(recordings =>
+                {
+
+                    recordings.forEach(r => console.log(r.sid))
+                    res.json(recordings)
+                }
+            );
+
 
 
 
