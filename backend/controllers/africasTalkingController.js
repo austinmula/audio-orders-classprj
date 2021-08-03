@@ -1,5 +1,4 @@
 const asyncHandler = require('express-async-handler');
-const axios = require('axios');
 const dotenv = require("dotenv");
 dotenv.config({
     path: "../.env",
@@ -32,10 +31,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
 
         if (text == '') {
             response = `END We will be calling you shortly for your order!`
-            // sleep a few seconds before calling
-           //  twilio call and record
 
-            // Send the response back to the API
             res.set('Content-Type: text/plain');
 
             res.send(response);
@@ -54,7 +50,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
 
             });
         }
-        console.log('after twilio')
+
 
 
 
@@ -69,8 +65,8 @@ exports.registerUser = asyncHandler(async (req, res) => {
 // @access  Public
 exports.getAllCalls = asyncHandler(async (req, res) => {
     try {
+        console.log('get all calls')
         const songs = []
-        // GET https://api.twilio.com/2010-04-01/Accounts/ACXXXXX.../Recordings/RE557ce644e5ab84fa21cc21112e22c485.mp3
 
         client.recordings.list({limit: 20})
             .then(recordings =>
@@ -79,13 +75,17 @@ exports.getAllCalls = asyncHandler(async (req, res) => {
                     recordings.forEach(r => {
                         const a = `https://api.twilio.com/2010-04-01/Accounts/${r.accountSid}/Recordings/${r.sid}.mp3`
                         songs.push(a)
-                        console.log(songs)
+                     })
+
+
+                    res.json({
+                        data:songs
                     })
-
-                    res.json(songs)
                 }
-            );
+            ).catch((error) => {
+            console.error(error);
 
+        });
 
 
 
