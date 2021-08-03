@@ -8,7 +8,7 @@ import Audios from './components/Audios'
 import Pending from './components/Pending'
 import Fulfilled from './components/Fulfilled'
 import axios from 'axios'
-
+import { v4 as uuidv4 } from 'uuid';
 
 const theme = createMuiTheme({
   palette:{
@@ -25,7 +25,8 @@ const theme = createMuiTheme({
 })
 
 function App() {
-    const data = [
+    const f = [];
+    const list = [
         {
             "id": 1,
             "name": "John Doe",
@@ -58,14 +59,33 @@ function App() {
         },
 
     ]
-    const [audios, setaudios] = useState(data);
-    const [audiosSort, setaudiosSort] = useState(data);
+    const [audios, setaudios] = useState([]);
+    const [audiosSort, setaudiosSort] = useState([]);
+    function genData(urls){
+
+        const c = Math.floor(Math.random() * list.length)
+        const b = list[c]
+        console.log('random b',b,c,list.length)
+        b.src = urls
+        b.id = uuidv4()
+        console.log(b)
+        return b
+    }
     //get from backend
     useEffect( ()=>{
         (async () => {
 
+
             const {data} = await axios.get('/api/recordings')
             console.log('data backend',data)
+            for(let i=0; i<data.length;i++){
+                const x = genData(data[i])
+                f.push(x)
+
+            }
+            setaudios(f)
+            setaudiosSort(f)
+
         })()
     },[])
 
@@ -83,28 +103,29 @@ function App() {
     setaudios(audios.filter((audio) => audio.id !== id ))
   }
 
-  useEffect(()=>{
-
-  },[audios])
 
 
   return (
     <ThemeProvider theme = {theme}>
-      <Router>
-        <Switch>
-          <DashboardLayout>
-            <Route exact path= "/">
-              <Audios audios = {audios.length > audiosSort.length ? audiosSort: audios } onToggle = {toggleFullfil} handleDelete={ handleDelete }/>
-            </Route>
-            <Route  path= "/pending">
-              <Pending audios = {audios} />
-            </Route>
-            <Route  path= "/fulfilled">
-              <Fulfilled audios = {audios} />
-            </Route>
-          </DashboardLayout>
-        </Switch>
-      </Router>
+        {audios.length > 0 && audiosSort.length > 0 &&
+        <Router>
+            <Switch>
+                <DashboardLayout>
+                    <Route exact path= "/">
+                        <Audios audios = {audios.length > audiosSort.length ? audiosSort: audios } onToggle = {toggleFullfil} handleDelete={ handleDelete }/>
+                    </Route>
+                    <Route  path= "/pending">
+                        <Pending audios = {audios} />
+                    </Route>
+                    <Route  path= "/fulfilled">
+                        <Fulfilled audios = {audios} />
+                    </Route>
+                </DashboardLayout>
+            </Switch>
+        </Router>
+
+        }
+
     </ThemeProvider>
   );
 }

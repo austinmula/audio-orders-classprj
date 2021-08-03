@@ -78,9 +78,7 @@ exports.getAllCalls = asyncHandler(async (req, res) => {
                      })
 
 
-                    res.json({
-                        data:songs
-                    })
+                    res.json(songs)
                 }
             ).catch((error) => {
             console.error(error);
